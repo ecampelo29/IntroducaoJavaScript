@@ -1,9 +1,14 @@
 //----------------------------funções 
 
+const alteraCorPaciente = (celula) => {
+    celula.classList.add('paciente-invalido');
+}
+
 // função para checagem de peso
 const pesoEhValido = (peso, imcTabela) => {
     if (peso <= 0 || peso >= 500){
         imcTabela.textContent = 'Peso inválido'
+        alteraCorPaciente(imcTabela);
         return false
     }
     return true;
@@ -13,6 +18,7 @@ const pesoEhValido = (peso, imcTabela) => {
 const alturaEhValida = (altura, imcTabela) => {
     if (altura <= 0 || altura >= 3.00 ) {
         imcTabela.textContent = 'Altura inválida'
+        alteraCorPaciente(imcTabela);
         return false;
     }
     return true;
