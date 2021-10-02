@@ -53,3 +53,7 @@ const pacientes = document.querySelectorAll(".paciente");
     calculoImc(peso, altura, imcTabela);
 
 }
+
+
+
+
