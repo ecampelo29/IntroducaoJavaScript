@@ -5,30 +5,34 @@ const alteraCorPaciente = (celula) => {
 }
 
 // função para checagem de peso
-const pesoEhValido = (peso, imcTabela) => {
+const pesoEhValido = (peso) => {
     if (peso <= 0 || peso >= 500){
-        imcTabela.textContent = 'Peso inválido'
-        alteraCorPaciente(imcTabela);
         return false
     }
     return true;
 }
 
 // função para checagem de altura
-const alturaEhValida = (altura, imcTabela) => {
-    if (altura <= 0 || altura >= 3.00 ) {
-        imcTabela.textContent = 'Altura inválida'
-        alteraCorPaciente(imcTabela);
+const alturaEhValida = (altura) => {
+    if (altura <= 0 || altura >= 3.00 ) {        
         return false;
     }
     return true;
 }
 
-// função que calcula o imc
-const calculoImc = (peso, altura, imcTabela) => {
-    if (pesoEhValido(peso, imcTabela) && alturaEhValida(altura, imcTabela)){
-        imcTabela.textContent = (peso /(altura**2)).toFixed(2);    
+// função para gravação dos erros na tabela existente
+const gravaErro = (peso, altura) => {
+    if (!pesoEhValido(peso)) {
+        return "Peso Inválido"
     }
+    if (!alturaEhValida(altura)) {
+        return "Altura Inválida"
+    }
+}
+
+// função que calcula o imc
+const calculoImc = (peso, altura) => {
+        return (peso /(altura**2)).toFixed(2);    
 }
 
 // busca todos os elementos da tabela cuja classe é ".paciente"
@@ -49,9 +53,15 @@ const pacientes = document.querySelectorAll(".paciente");
     // localiza a posição na tabela
     imcTabela = paciente.querySelector(".info-imc");
 
-    // cálculo do imc
-    calculoImc(peso, altura, imcTabela);
+    // validações dos dados
+    if (pesoEhValido(peso) && alturaEhValida(altura)){
+        imcTabela.textContent = calculoImc(peso, altura);
+    } else {
+        imcTabela.textContent = gravaErro(peso, altura)
+        alteraCorPaciente(imcTabela);
+    }
 
+    
 }
 
 

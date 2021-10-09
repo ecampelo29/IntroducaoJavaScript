@@ -11,7 +11,8 @@ const obtemPacienteDoFormulario = (formulario) => {
         nome: formulario.nome.value,
         peso: formulario.peso.value,
         altura: formulario.altura.value,
-        gordura: formulario.gordura.value
+        gordura: formulario.gordura.value,
+        imc: calculoImc(formulario.peso.value, formulario.altura.value)
     }
     return paciente;
 }
@@ -30,23 +31,51 @@ const montaTr = (paciente) => {
      // criando uma estrutua de tr (linha da tabela)
      const pacienteTr = document.createElement('tr');
      pacienteTr.classList.add("paciente")
-     const nomeTd = montaTd (paciente.nome, "info-nome")
-     const pesoTd =  montaTd (paciente.peso, "info-peso")
-     const alturaTd =  montaTd (paciente.altura, "info-altura")
-     const gorduraTd =  montaTd (paciente.gordura, "info-gordura")
-     const imcTd = montaTd (0,"info-imc")
-
-     calculoImc(pesoTd.textContent, alturaTd.textContent, imcTd)
  
      // montando a estrutura no html
-     pacienteTr.appendChild(nomeTd);
-     pacienteTr.appendChild(pesoTd);
-     pacienteTr.appendChild(alturaTd);
-     pacienteTr.appendChild(gorduraTd);
-     pacienteTr.appendChild(imcTd);
+     pacienteTr.appendChild(montaTd (paciente.nome, "info-nome"));
+     pacienteTr.appendChild(montaTd (paciente.peso, "info-peso"));
+     pacienteTr.appendChild(montaTd (paciente.altura, "info-altura"));
+     pacienteTr.appendChild(montaTd (paciente.gordura, "info-gordura"));
+     pacienteTr.appendChild(montaTd (paciente.imc,"info-imc"));
 
      return pacienteTr;
 
+}
+
+//função para validar os dados do paciente
+const validaPaciente = (paciente) => {
+    let erros = [];
+    if (paciente.nome.length == 0 || paciente.peso.length == 0 || 
+        paciente.altura.length == 0 || paciente.gordura.length == 0){
+            erros.push("Formulário não aceita dados em branco");
+        } else {
+            if (!pesoEhValido(paciente.peso)){
+                erros.push("Peso Inválido");
+            }
+            if (!alturaEhValida(paciente.altura)){
+                erros.push("Altura Inválida");
+            }
+        }
+    return erros 
+}
+
+// função que exibe as mensagens de erros na página
+const exibeMensagemDeErro = (mensagensErro) => {
+    const ul = document.querySelector(".mensagens-erro")
+    ul.innerHTML=""
+
+    mensagensErro.forEach((erro) => {
+        const li = document.createElement("li");
+        li.textContent = erro
+        ul.appendChild(li)
+    });
+}
+
+// função para resetar as mensagens de erros
+const apagaErros = () => {
+    const ul = document.querySelector(".mensagens-erro")
+    ul.innerHTML = ""
 }
 
 // listener com função anônima
@@ -61,9 +90,16 @@ botao_adicionar.addEventListener('click', (event)=>{
     const paciente = obtemPacienteDoFormulario(formulario)
     // criando o Tr
     const pacienteTr = montaTr(paciente)
-    // incluindo o Tr na tabela
-    tabela.appendChild(pacienteTr)
+    // verificação de mensagens de erro
+    const mensagensErro =  validaPaciente(paciente)
 
-
-
+    if (mensagensErro.length > 0){
+        exibeMensagemDeErro(mensagensErro);
+    } else {
+        // incluindo o Tr na tabela
+        tabela.appendChild(pacienteTr);
+        formulario.reset()
+        apagaErros()
+    }
+    
 })
