@@ -15,7 +15,7 @@ const obtemPacienteDoFormulario = (formulario) => {
     }
     return paciente;
 }
-
+// função que monta tag <td>
 const montaTd = (info, classe) => {
     
     const td  = document.createElement('td');
@@ -34,7 +34,7 @@ const montaTr = (paciente) => {
      const pesoTd =  montaTd (paciente.peso, "info-peso")
      const alturaTd =  montaTd (paciente.altura, "info-altura")
      const gorduraTd =  montaTd (paciente.gordura, "info-gordura")
-     const imcTd =  document.createElement('td')
+     const imcTd = montaTd (0,"info-imc")
 
      calculoImc(pesoTd.textContent, alturaTd.textContent, imcTd)
  
