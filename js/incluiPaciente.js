@@ -78,18 +78,12 @@ const apagaErros = () => {
     ul.innerHTML = ""
 }
 
-// listener com função anônima
-botao_adicionar.addEventListener('click', (event)=>{
-    event.preventDefault();
-    
-    // capturando o formulário
-    const formulario = document.querySelector('#form-adiciona')
+// função que adiciona paciente na tabela 
+const adicionaPacienteTabela = (paciente) => {
     // capturando a tabela
-    const tabela = document.querySelector('#tabela-pacientes')
-    // criando o paciente
-    const paciente = obtemPacienteDoFormulario(formulario)
-    // criando o Tr
-    const pacienteTr = montaTr(paciente)
+    const tabela = document.querySelector('#tabela-pacientes');
+     // criando o Tr
+    const pacienteTr = montaTr(paciente);
     // verificação de mensagens de erro
     const mensagensErro =  validaPaciente(paciente)
 
@@ -98,8 +92,24 @@ botao_adicionar.addEventListener('click', (event)=>{
     } else {
         // incluindo o Tr na tabela
         tabela.appendChild(pacienteTr);
-        formulario.reset()
         apagaErros()
     }
+}
+
+// listener com função anônima
+botao_adicionar.addEventListener('click', (event)=>{
+    event.preventDefault();
+    
+    // capturando o formulário
+    const formulario = document.querySelector('#form-adiciona')
+
+    // criando o paciente
+    const paciente = obtemPacienteDoFormulario(formulario)
+   
+    //incluindo na tabela
+    adicionaPacienteTabela(paciente)
+    formulario.reset()
+
+
     
 })
